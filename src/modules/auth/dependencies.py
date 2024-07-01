@@ -1,0 +1,50 @@
+__all__ = ["verify_request"]
+
+from typing import Optional
+
+from fastapi import Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.api.exceptions import NoCredentialsException, IncorrectCredentialsException
+from src.modules.auth.repository import TokenRepository
+from src.modules.auth.schemas import VerificationResult
+
+bearer_scheme = HTTPBearer(
+    scheme_name="Bearer",
+    description="Your JSON Web Token (JWT)",
+    bearerFormat="JWT",
+    auto_error=False,  # We'll handle error manually
+)
+
+
+async def get_access_token(
+    bearer: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
+) -> Optional[str]:
+    # Prefer header to cookie
+    if bearer:
+        return bearer.credentials
+
+
+async def verify_request(
+    bearer: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
+) -> VerificationResult:
+    """
+    Check one of the following:
+    - Bearer token from header with BOT_TOKEN
+    - Bearer token from header with webapp data
+    :raises NoCredentialsException: if token is not provided
+    :raises IncorrectCredentialsException: if token is invalid
+    """
+    from src.api.shared import Shared
+
+    if not bearer:
+        raise NoCredentialsException()
+
+    async with Shared.f(AsyncSession) as session:
+        verification_result = await TokenRepository.verify_access_token(bearer.credentials, session)
+
+    if verification_result.success:
+        return verification_result
+
+    raise IncorrectCredentialsException()
