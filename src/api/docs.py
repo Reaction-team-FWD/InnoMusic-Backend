@@ -6,29 +6,13 @@ from fastapi.routing import APIRoute
 VERSION = "0.1.0"
 
 # Info for OpenAPI specification
-TITLE = "FastAPI template"
-SUMMARY = "FastAPI template for InNoHassle ecosystem."
-
-DESCRIPTION = """
-### About this project
-"""
-
-CONTACT_INFO = {
-    "name": "one-zero-eight (Telegram)",
-    "url": "https://t.me/one_zero_eight",
-}
+TITLE = "InnoMusic API"
+SUMMARY = "System for free sharing and downloading music"
 
 LICENSE_INFO = {
     "name": "MIT License",
     "identifier": "MIT",
 }
-
-TAGS_INFO = [
-    {
-        "name": "Users",
-        "description": "User data.",
-    },
-]
 
 
 def generate_unique_operation_id(route: APIRoute) -> str:

@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "fastapi-template"
+name = "InnoMusic-Api"
 version = "0.1.0"
 description = ""
-authors = ["one-zero-eight <https://t.me/one_zero_eight>"]
+authors = ["Maxim Fomin <m.fomin@innopolis.university>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = { extras = ["all"], version = "^0.104.0" }
+fastapi = { extras = ["all"], version = "^0.111.0" }
 pydantic = { version = "^2.4.2", extras = ["email"] }
 cryptography = "^42.0.2"
 authlib = "^1.2.1"
@@ -15,7 +15,7 @@ sqlalchemy = "^2.0.22"
 alembic = "^1.12.1"
 asyncpg = "^0.29.0"
 passlib = "^1.7.4"
-sqladmin = "^0.16.0"
+sqladmin = "^0.18.0"
 bcrypt = "^4.1.1"
 
 [tool.poetry.group.prod.dependencies]

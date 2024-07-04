@@ -12,6 +12,10 @@ class VerificationResult(BaseModel):
     user_id: Optional[int] = None
     role: Optional[UserRole] = None
 
+    @property
+    def is_admin(self) -> bool:
+        return self.role == UserRole.ADMIN
+
 
 class AuthResult(BaseModel):
     success: bool

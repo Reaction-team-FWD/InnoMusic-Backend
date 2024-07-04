@@ -15,11 +15,8 @@ from src.config_schema import Environment
 app = FastAPI(
     title=docs.TITLE,
     summary=docs.SUMMARY,
-    description=docs.DESCRIPTION,
     version=docs.VERSION,
-    contact=docs.CONTACT_INFO,
     license_info=docs.LICENSE_INFO,
-    openapi_tags=docs.TAGS_INFO,
     servers=[
         {"url": settings.app_root_path, "description": "Current"},
     ],
