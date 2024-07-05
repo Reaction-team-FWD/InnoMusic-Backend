@@ -9,7 +9,6 @@ from src.api.docs import generate_unique_operation_id
 from src.api.lifespan import lifespan
 from src.api.routers import routers
 from src.config import settings
-from src.config_schema import Environment
 
 # App definition
 app = FastAPI(
@@ -47,12 +46,6 @@ if settings.cors_allow_origins:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-# Mock utilities
-if settings.environment == Environment.DEVELOPMENT:
-    from fastapi_mock import MockUtilities
-
-    MockUtilities(app, return_example_instead_of_500=True)
 
 
 # Redirect root to docs
