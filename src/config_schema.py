@@ -86,8 +86,7 @@ class Settings(BaseModel):
     # Security
     cors_allow_origins: list[str] = Field(
         default_factory=lambda: [
-            "https://innohassle.ru",
-            "http://localhost:3000",
+            "http://localhost",
         ],
         description="CORS origins, used by FastAPI CORSMiddleware",
     )
