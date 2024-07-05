@@ -1,14 +1,15 @@
-__all__ = ["Shared", "VerifiedDep", "SessionDep", "EnsureAdminDep"]
+__all__ = ["Shared", "SessionDep", "EnsureAdminDep"]
+
+from typing import TypeVar, ClassVar, Callable, Union, Hashable, Annotated, TYPE_CHECKING
 
 from fastapi import Depends
-
-from typing import TypeVar, ClassVar, Callable, Union, Hashable, Annotated
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.exceptions import ForbiddenException
-from src.modules.auth.schemas import VerificationResult
-from src.modules.auth.dependencies import verify_request
+
+if TYPE_CHECKING:
+    from src.modules.user.schemas import ViewUser
+
 
 T = TypeVar("T")
 
@@ -58,9 +59,6 @@ class Shared:
             return provider
 
 
-VerifiedDep = Annotated[VerificationResult, Depends(verify_request)]
-
-
 async def get_session():
     async with Shared.f(AsyncSession) as session:
         yield session
@@ -69,10 +67,22 @@ async def get_session():
 SessionDep = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def ensure_admin(verification: VerifiedDep):
-    if not verification.is_admin:
+from src.modules.auth.dependencies import VerifiedDep  # noqa: E402
+
+
+async def get_user(verification: VerifiedDep) -> "ViewUser":
+    if not verification.success:
         raise ForbiddenException()
-    return verification
+    return verification.user
 
 
-EnsureAdminDep = Annotated[VerificationResult, Depends(ensure_admin)]
+UserDep = Annotated["ViewUser", Depends(get_user)]
+
+
+async def ensure_admin(user: UserDep):
+    if not user.is_admin:
+        raise ForbiddenException()
+    return user
+
+
+EnsureAdminDep = Annotated["ViewUser", Depends(ensure_admin)]

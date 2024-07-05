@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
 from src.api.shared import Shared
-from src.api.exceptions import IncorrectCredentialsException
+from src.modules.auth.exceptions import IncorrectCredentialsException
 from src.config import settings
-from src.modules.auth.repository import TokenRepository, AuthRepository
+from src.modules.auth.repository import AuthTokenRepository, AuthRepository
 from src.modules.user.repository import UserRepository
 
 
@@ -26,7 +26,7 @@ class AdminAuth(AuthenticationBackend):
         except IncorrectCredentialsException:
             return False
 
-        token = TokenRepository.create_access_token(user_id)
+        token = AuthTokenRepository.create_access_token(user_id)
         request.session["access_token"] = token
         return True
 
@@ -48,7 +48,7 @@ class AdminAuth(AuthenticationBackend):
             token = bearer.replace("Bearer ", "")
 
         async with Shared.f(AsyncSession) as session:
-            verification_result = await TokenRepository.verify_access_token(token, session)
+            verification_result = await AuthTokenRepository.verify_access_token(token, session)
 
             if not verification_result:
                 return False

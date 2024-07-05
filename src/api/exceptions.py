@@ -1,6 +1,4 @@
 __all__ = [
-    "NoCredentialsException",
-    "IncorrectCredentialsException",
     "ForbiddenException",
     "InvalidRedirectUri",
     "ObjectNotFound",
@@ -8,40 +6,6 @@ __all__ = [
 
 from fastapi import HTTPException
 from starlette import status
-
-
-class NoCredentialsException(HTTPException):
-    """
-    HTTP_401_UNAUTHORIZED
-    """
-
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=self.responses[401]["description"],
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    responses = {
-        401: {
-            "description": "No credentials provided",
-            "headers": {"WWW-Authenticate": {"schema": {"type": "string"}}},
-        }
-    }
-
-
-class IncorrectCredentialsException(HTTPException):
-    """
-    HTTP_401_UNAUTHORIZED
-    """
-
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=self.responses[401]["description"],
-        )
-
-    responses = {401: {"description": "Could not validate credentials"}}
 
 
 class InvalidRedirectUri(HTTPException):

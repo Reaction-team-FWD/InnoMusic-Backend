@@ -21,5 +21,5 @@ class ViewUser(BaseModel):
 
 class CreateUser(BaseModel):
     login: str
-    password: str
+    password_hash: str
     name: str

@@ -1,18 +1,28 @@
 __all__ = ["router"]
 
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from fastapi.responses import Response
+from fastapi.security import OAuth2PasswordRequestForm
 
 from src.api.shared import Shared
-from src.modules.auth.repository import TokenRepository, AuthRepository
-from src.modules.auth.schemas import AuthResult, AuthCredentials
+from src.modules.auth.repository import AuthTokenRepository, AuthRepository
+from src.modules.auth.schemas import RegisterData
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-# by-tag
-@router.post("/by-credentials", response_model=AuthResult)
-async def by_credentials(credentials: AuthCredentials):
+@router.post("/register")
+async def register_user(data: RegisterData):
     auth_repository = Shared.f(AuthRepository)
-    user_id = await auth_repository.authenticate_user(password=credentials.password, login=credentials.login)
-    token = TokenRepository.create_access_token(user_id)
-    return AuthResult(token=token, success=True)
+    await auth_repository.register_user(data.name, data.login, data.password)
+    return Response(status_code=201)
+
+
+@router.post("/login")
+async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    auth_repository = Shared.f(AuthRepository)
+    user_id = await auth_repository.authenticate_user(password=form_data.password, login=form_data.username)
+    token = AuthTokenRepository.create_access_token(user_id)
+    return {"access_token": token, "token_type": "bearer"}

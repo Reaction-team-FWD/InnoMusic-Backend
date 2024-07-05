@@ -40,10 +40,11 @@ def setup_admin_panel(app: FastAPI):
 async def setup_predefined():
     user_repository = Shared.f(UserRepository)
     async with Shared.f(AsyncSession) as session:
+        auth_repository = Shared.f(AuthRepository)
         if not await user_repository.read_by_login(settings.predefined.first_superuser_login, session):
             await user_repository.create_superuser(
                 login=settings.predefined.first_superuser_login,
-                password=settings.predefined.first_superuser_password,
+                password_hash=auth_repository.get_password_hash(settings.predefined.first_superuser_password),
                 session=session,
             )
 
