@@ -1,4 +1,4 @@
-"""chore: edit CORS policy
+"""add albums and songs
 
 Revision ID: b49dd2a99737
 Revises: 2cc9d691a5f3
