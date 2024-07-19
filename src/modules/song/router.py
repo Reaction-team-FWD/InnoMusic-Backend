@@ -7,6 +7,7 @@ from src.modules.auth.dependencies import VerifiedDep
 from src.modules.song.api_schemas import SongViewApi, CreateSongApi, UpdateSongApi
 from src.modules.song.repository import SongRepository
 from src.modules.song.schemas import ViewSong, CreateSong, UpdateSong
+from src.modules.user.repository import UserRepository
 
 router = APIRouter(prefix="/song", tags=["Songs"])
 
@@ -14,11 +15,15 @@ router = APIRouter(prefix="/song", tags=["Songs"])
 @router.get("/all")
 async def get_all_songs() -> list[SongViewApi]:
     song_repository = Shared.f(SongRepository)
+    user_repository = Shared.f(UserRepository)
     async with Shared.f(AsyncSession) as session:
         songs = await song_repository.get_all(session)
         response: list[SongViewApi] = []
         for song in songs:
-            authors = await song_repository.get_author_ids(session, song.id)
+            authors_ids = await song_repository.get_author_ids(session, song.id)
+            authors = []
+            for id_ in authors_ids:
+                authors.append((await user_repository.read(id_, session)).name)
             response.append(SongViewApi(**song.model_dump(), authors=authors))
     return response
 
@@ -29,11 +34,15 @@ async def get_song(song_id: int) -> SongViewApi:
     Get song info
     """
     song_repository = Shared.f(SongRepository)
+    user_repository = Shared.f(UserRepository)
     async with Shared.f(AsyncSession) as session:
         song = await song_repository.read(session, song_id)
         if song is None:
             raise ObjectNotFound()
-        authors = await song_repository.get_author_ids(session, song_id)
+        authors_ids = await song_repository.get_author_ids(session, song_id)
+        authors = []
+        for id_ in authors_ids:
+            authors.append((await user_repository.read(id_, session)).name)
     return SongViewApi(**song.model_dump(), authors=authors)
 
 

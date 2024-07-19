@@ -15,7 +15,8 @@ class SongViewApi(BaseModel):
     name: str
     file: StringifyableUrl
     cover: StringifyableUrl | None = None
-    authors: list[int]
+    authors: list[str]
+    duration: str = "3:00"
 
 
 class UpdateSongApi(BaseModel):
