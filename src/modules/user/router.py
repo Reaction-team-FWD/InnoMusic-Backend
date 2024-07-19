@@ -12,7 +12,7 @@ from src.modules.auth.exceptions import (
 from src.modules.user.repository import UserRepository
 from src.modules.user.schemas import ViewUser
 
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter(prefix="/user", tags=["Users"])
 
 
 @router.get(

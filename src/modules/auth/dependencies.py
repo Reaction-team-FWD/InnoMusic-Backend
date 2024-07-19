@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.shared import Shared
 from src.modules.auth.exceptions import NoCredentialsException, IncorrectCredentialsException
 from src.modules.auth.repository import AuthTokenRepository
-from src.modules.auth.schemas import VerificationResult
+from src.modules.user.schemas import AuthorizedUserInfo
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/auth/login",
@@ -19,7 +19,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 async def verify_request(
     token: Annotated[str | None, Depends(oauth2_scheme)],
-) -> VerificationResult:
+) -> AuthorizedUserInfo:
     """
     Check one of the following:
     - Bearer token from header with BOT_TOKEN
@@ -35,11 +35,11 @@ async def verify_request(
         verification_result = await AuthTokenRepository.verify_access_token(token, session)
 
     if verification_result.success:
-        return verification_result
+        return verification_result.user
 
     raise IncorrectCredentialsException()
 
 
-VerifiedDep = Annotated[VerificationResult, Depends(verify_request)]
+VerifiedDep = Annotated[AuthorizedUserInfo, Depends(verify_request)]
 
 __all__ = ["verify_request", "VerifiedDep"]

@@ -15,7 +15,7 @@ from src.modules.auth.exceptions import IncorrectCredentialsException
 from src.modules.auth.exceptions import UserAlreadyRegisteredException
 from src.modules.auth.schemas import VerificationResult, UserCredentialsFromDB
 from src.modules.user.repository import UserRepository
-from src.modules.user.schemas import ViewUser, CreateUser
+from src.modules.user.schemas import ViewUser, CreateUser, AuthorizedUserInfo
 from src.storages.sqlalchemy.models import User
 
 
@@ -39,7 +39,7 @@ class AuthTokenRepository:
         if user is None:
             return VerificationResult(success=False)
 
-        return VerificationResult(success=True, user=user)
+        return VerificationResult(success=True, user=AuthorizedUserInfo.model_validate(user, from_attributes=True))
 
     @classmethod
     def create_access_token(cls, user_id: int) -> str:
@@ -98,7 +98,7 @@ class AuthRepository:
         from src.api.shared import Shared
 
         async with Shared.f(AsyncSession) as session:
-            q = select(User.id, User.password_hash).where(User.login == login)
+            q = select(User.id, User.password_hash).where(login == User.login)
             user = (await session.execute(q)).one_or_none()
             if user:
                 return UserCredentialsFromDB(

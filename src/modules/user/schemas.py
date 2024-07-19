@@ -1,5 +1,3 @@
-__all__ = ["ViewUser", "CreateUser"]
-
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.storages.sqlalchemy.models.user import UserRole
@@ -24,3 +22,13 @@ class CreateUser(BaseModel):
     name: str | None = None
     login: str
     password_hash: str
+
+
+class AuthorizedUserInfo(BaseModel):
+    id: int
+    login: int
+    name: str
+    role: UserRole = UserRole.DEFAULT
+
+
+__all__ = ["ViewUser", "CreateUser", "AuthorizedUserInfo"]

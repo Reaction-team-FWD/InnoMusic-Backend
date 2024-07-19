@@ -2,12 +2,12 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from src.modules.user.schemas import ViewUser
+from src.modules.user.schemas import AuthorizedUserInfo
 
 
 class VerificationResult(BaseModel):
     success: bool
-    user: Optional[ViewUser] = None
+    user: Optional[AuthorizedUserInfo] = None
 
 
 class RegisterData(BaseModel):
