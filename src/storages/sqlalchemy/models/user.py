@@ -25,7 +25,7 @@ class User(Base, IdMixin):
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False, default=UserRole.DEFAULT)
 
     albums: Mapped[list["Album"]] = relationship(back_populates="authors", secondary="author_album")
-    songs: Mapped[list["Song"]] = relationship(back_populates="authors", secondary="author_album")
+    songs: Mapped[list["Song"]] = relationship(back_populates="authors", secondary="author_song")
 
 
 __all__ = ["User", "UserRole"]
