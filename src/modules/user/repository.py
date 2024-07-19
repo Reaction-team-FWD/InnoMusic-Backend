@@ -1,28 +1,13 @@
 __all__ = ["UserRepository"]
 
-import random
 from typing import Optional
 
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.user.schemas import ViewUser, CreateUser
+from src.modules.utils import get_available_ids
 from src.storages.sqlalchemy.models.user import User
-
-MIN_USER_ID = 100_000
-MAX_USER_ID = 999_999
-
-
-async def _get_available_user_ids(session: AsyncSession, count: int = 1) -> list[int] | int:
-    q = select(User.id)
-    excluded_ids = set(await session.scalars(q))
-    excluded_ids: set[int]
-    available_ids = set()
-    while len(available_ids) < count:
-        chosen_id = random.randint(MIN_USER_ID, MAX_USER_ID)
-        if chosen_id not in excluded_ids:
-            available_ids.add(chosen_id)
-    return list(available_ids) if count > 1 else available_ids.pop()
 
 
 class UserRepository:
@@ -38,7 +23,7 @@ class UserRepository:
     @classmethod
     async def create(cls, user: CreateUser, session: AsyncSession) -> ViewUser:
         user_dict = user.model_dump()
-        user_dict["id"] = await _get_available_user_ids(session)
+        user_dict["id"] = await get_available_ids(session, User)
         q = insert(User).values(user_dict).returning(User)
         new_user = await session.scalar(q)
         await session.commit()
@@ -47,7 +32,7 @@ class UserRepository:
     @classmethod
     async def create_superuser(cls, login: str, password_hash: str, session: AsyncSession) -> ViewUser:
         user_dict = {
-            "id": await _get_available_user_ids(session),
+            "id": await get_available_ids(session, User),
             "login": login,
             "name": "Superuser",
             "password_hash": password_hash,
