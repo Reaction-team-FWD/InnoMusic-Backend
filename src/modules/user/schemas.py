@@ -9,8 +9,9 @@ class ViewUser(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    login: str
     name: str
+    profile_picture: bytes | None = None
+    login: str
     password_hash: str = Field(exclude=True)
     role: UserRole = UserRole.DEFAULT
 
@@ -20,6 +21,6 @@ class ViewUser(BaseModel):
 
 
 class CreateUser(BaseModel):
+    name: str | None = None
     login: str
     password_hash: str
-    name: str

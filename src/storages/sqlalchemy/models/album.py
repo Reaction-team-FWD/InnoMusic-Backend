@@ -11,6 +11,7 @@ class Album(Base, IdMixin):
     __tablename__ = "albums"
 
     name: Mapped[str] = mapped_column(nullable=False)
+    cover: Mapped[bytes | None] = mapped_column(nullable=True)
 
     songs: Mapped[list["Song"]] = relationship(back_populates="album")
     authors: Mapped[list["User"]] = relationship(back_populates="albums", secondary="author_album")
