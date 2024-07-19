@@ -53,7 +53,7 @@ class AdminAuth(AuthenticationBackend):
             if not verification_result:
                 return False
 
-            user = await Shared.f(UserRepository).read(verification_result.user_id, session)
+            user = await Shared.f(UserRepository).read(verification_result.user.id, session)
 
         if not user or not user.is_admin:
             return False

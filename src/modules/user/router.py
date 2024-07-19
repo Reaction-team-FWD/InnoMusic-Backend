@@ -31,6 +31,6 @@ async def get_me(
     """
     user_repository = Shared.f(UserRepository)
     async with Shared.f(AsyncSession) as session:
-        user = await user_repository.read(verification.user.id, session)
+        user = await user_repository.read(verification.id, session)
     user: ViewUser
     return user

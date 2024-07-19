@@ -26,7 +26,7 @@ class CreateUser(BaseModel):
 
 class AuthorizedUserInfo(BaseModel):
     id: int
-    login: int
+    login: str
     name: str
     role: UserRole = UserRole.DEFAULT
 
