@@ -1,5 +1,3 @@
-__all__ = ["SongRepository"]
-
 from sqlalchemy import select, delete, update, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,7 +9,7 @@ from src.storages.sqlalchemy.models.song import Song
 
 class SongRepository:
     @classmethod
-    async def get_all(cls, session: AsyncSession) -> list["ViewSong"]:
+    async def get_all(cls, session: AsyncSession) -> list[ViewSong]:
         songs = await session.scalars(select(Song))
         return [ViewSong.model_validate(song, from_attributes=True) for song in songs]
 
@@ -59,3 +57,6 @@ class SongRepository:
     @classmethod
     async def exists(cls, session: AsyncSession, song_id: int):
         return await session.get(Song, song_id) is not None
+
+
+__all__ = ["SongRepository"]

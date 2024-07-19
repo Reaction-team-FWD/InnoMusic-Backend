@@ -15,7 +15,7 @@ class SQLAlchemyStorage:
     def from_url(cls, url: str) -> "SQLAlchemyStorage":
         from sqlalchemy.ext.asyncio import create_async_engine
 
-        engine = create_async_engine(url)
+        engine = create_async_engine(url, echo=True)
         return cls(engine)
 
     def create_session(self) -> AsyncSession:
