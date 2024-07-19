@@ -11,5 +11,8 @@ class AuthorSong(Base):
         ForeignKey("songs.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False, primary_key=True
     )
 
+    def __init__(self, author_id: int, song_id: int):
+        super().__init__(author_id=author_id, song_id=song_id)
+
 
 __all__ = ["AuthorSong"]
