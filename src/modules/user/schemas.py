@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.modules.utils import StringifyableUrl
 from src.storages.sqlalchemy.models.user import UserRole
 
 
@@ -8,7 +9,7 @@ class ViewUser(BaseModel):
 
     id: int
     name: str
-    profile_picture: bytes | None = None
+    profile_picture: StringifyableUrl | None = None
     login: str
     password_hash: str = Field(exclude=True)
     role: UserRole = UserRole.DEFAULT

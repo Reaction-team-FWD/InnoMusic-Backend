@@ -19,7 +19,7 @@ class User(Base, IdMixin):
     __tablename__ = "users"
 
     name: Mapped[str] = mapped_column(nullable=False)
-    profile_picture: Mapped[bytes | None] = mapped_column(nullable=True)
+    profile_picture: Mapped[str | None] = mapped_column(nullable=True)
     login: Mapped[str] = mapped_column(unique=True)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False, default=UserRole.DEFAULT)

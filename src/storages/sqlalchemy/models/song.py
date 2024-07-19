@@ -11,8 +11,8 @@ class Song(Base, IdMixin):
     __tablename__ = "songs"
 
     name: Mapped[str] = mapped_column(nullable=False)
-    file: Mapped[bytes] = mapped_column(nullable=False)
-    cover: Mapped[bytes | None] = mapped_column(nullable=True)
+    file: Mapped[str] = mapped_column(nullable=False)
+    cover: Mapped[str | None] = mapped_column(nullable=True)
     album_id: Mapped[int | None] = mapped_column(
         ForeignKey("albums.id", onupdate="CASCADE", ondelete="SET NULL"), nullable=True
     )

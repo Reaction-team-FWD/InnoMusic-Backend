@@ -1,10 +1,22 @@
 import random
-from typing import Type
+from typing import Type, Annotated
 
+from pydantic import AfterValidator, ValidationError
+from pydantic_core import Url
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.storages.sqlalchemy.models.__mixin__ import IdMixin
+
+
+def url_to_str(url: Url) -> str:
+    s = str(url)
+    if not s.startswith("http://") and not s.startswith("https://"):
+        raise ValidationError("URL must start with 'http://' or 'https://'")
+    return s
+
+
+StringifyableUrl = Annotated[Url, AfterValidator(url_to_str)]
 
 
 async def get_available_ids(
