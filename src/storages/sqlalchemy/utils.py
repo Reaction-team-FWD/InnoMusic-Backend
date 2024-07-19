@@ -21,6 +21,8 @@ __all__ = [
     "String",
     "association_proxy",
     "AssociationProxy",
+    "Base",
+    "IdMixin",
 ]
 
 from sqlalchemy import ForeignKey, UniqueConstraint
@@ -32,3 +34,6 @@ from sqlalchemy import bindparam
 from sqlalchemy import DateTime
 from sqlalchemy.sql import func
 from sqlalchemy import Enum as SQLEnum, String
+
+from .models.base import Base
+from .models.__mixin__ import IdMixin

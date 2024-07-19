@@ -7,7 +7,7 @@ from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.user.schemas import ViewUser, CreateUser
-from src.storages.sqlalchemy.models.users import User
+from src.storages.sqlalchemy.models.user import User
 
 MIN_USER_ID = 100_000
 MAX_USER_ID = 999_999

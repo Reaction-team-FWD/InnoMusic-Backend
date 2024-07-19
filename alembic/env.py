@@ -30,7 +30,7 @@ config.set_main_option("sqlalchemy.url", app_settings["database"]["uri"])
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from src.storages.sqlalchemy.models import Base  # noqa: E402
+from src.storages.sqlalchemy.models import *  # noqa: E402
 
 target_metadata = Base.metadata
 

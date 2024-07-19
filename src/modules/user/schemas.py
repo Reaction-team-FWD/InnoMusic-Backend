@@ -2,7 +2,7 @@ __all__ = ["ViewUser", "CreateUser"]
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.storages.sqlalchemy.models.users import UserRole
+from src.storages.sqlalchemy.models.user import UserRole
 
 
 class ViewUser(BaseModel):
