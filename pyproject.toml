@@ -17,6 +17,7 @@ asyncpg = "^0.29.0"
 passlib = "^1.7.4"
 sqladmin = "^0.18.0"
 bcrypt = "^4.1.1"
+levenshtein = "^0.25.1"
 
 [tool.poetry.group.prod.dependencies]
 gunicorn = "21.2.0"
