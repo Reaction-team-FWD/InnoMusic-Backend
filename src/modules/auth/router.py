@@ -3,7 +3,6 @@ __all__ = ["router"]
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.api.shared import Shared
@@ -17,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def register_user(data: RegisterData):
     auth_repository = Shared.f(AuthRepository)
     await auth_repository.register_user(data.name, data.login, data.password)
-    return Response(status_code=201)
+    return
 
 
 @router.post("/login")
