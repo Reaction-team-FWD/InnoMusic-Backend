@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 
 from src.modules.user.schemas import AuthorizedUserInfo
 
@@ -12,7 +12,7 @@ class VerificationResult(BaseModel):
 
 class RegisterData(BaseModel):
     name: str = Field(description="User name")
-    login: str = Field(description="User login")
+    login: EmailStr = Field(description="User email")
     password: str = Field(description="User password")
 
 
