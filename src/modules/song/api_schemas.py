@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+from src.modules.user.schemas import ViewUser
 from src.modules.utils import StringifyableUrl
 
 
@@ -17,7 +18,7 @@ class SongViewApi(BaseModel):
     name: str
     file: StringifyableUrl
     cover: StringifyableUrl | None = None
-    authors: list[str]
+    authors: list[ViewUser]
 
 
 class UpdateSongApi(BaseModel):

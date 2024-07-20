@@ -23,7 +23,7 @@ async def get_all_songs() -> list[SongViewApi]:
             authors_ids = await song_repository.get_author_ids(session, song.id)
             authors = []
             for id_ in authors_ids:
-                authors.append((await user_repository.read(id_, session)).name)
+                authors.append((await user_repository.read(id_, session)))
             response.append(SongViewApi(**song.model_dump(), authors=authors))
     return response
 
@@ -42,7 +42,7 @@ async def get_song(song_id: int) -> SongViewApi:
         authors_ids = await song_repository.get_author_ids(session, song_id)
         authors = []
         for id_ in authors_ids:
-            authors.append((await user_repository.read(id_, session)).name)
+            authors.append((await user_repository.read(id_, session)))
     return SongViewApi(**song.model_dump(), authors=authors)
 
 
@@ -61,7 +61,7 @@ async def create_song(song: CreateSongApi, user: VerifiedDep) -> SongViewApi:
         await song_repository.add_authors(session, view_song.id, author_ids)
         authors = []
         for id_ in author_ids:
-            authors.append((await user_repository.read(id_, session)).name)
+            authors.append((await user_repository.read(id_, session)))
 
     return SongViewApi(**view_song.model_dump(), authors=authors)
 
