@@ -5,8 +5,10 @@ from src.modules.utils import StringifyableUrl
 
 class CreateSongApi(BaseModel):
     name: str
-    file: StringifyableUrl
-    cover: StringifyableUrl | None = None
+    file: StringifyableUrl = "https://www.ostmusic.org/sound/track/undertale/100.%20MEGALOVANIA.mp3"
+    cover: StringifyableUrl | None = (
+        "https://inno-music-frontend.vercel.app/_next/image?url=%2Fimg%2FalbumCover.png&w=750&q=75"
+    )
     extra_authors: list[int] | None = None
 
 
@@ -16,7 +18,6 @@ class SongViewApi(BaseModel):
     file: StringifyableUrl
     cover: StringifyableUrl | None = None
     authors: list[str]
-    duration: str = "3:00"
 
 
 class UpdateSongApi(BaseModel):

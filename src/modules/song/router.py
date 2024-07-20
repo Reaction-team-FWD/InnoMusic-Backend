@@ -51,14 +51,19 @@ async def create_song(song: CreateSongApi, user: VerifiedDep) -> SongViewApi:
     """
     Create song
     """
+    author_ids = [user.id] + (song.extra_authors or [])
     song_repository = Shared.f(SongRepository)
+    user_repository = Shared.f(UserRepository)
     async with Shared.f(AsyncSession) as session:
         view_song: ViewSong = await song_repository.create(
             session, CreateSong.model_validate(song, from_attributes=True)
         )
-        await song_repository.add_authors(session, view_song.id, [user.id] + (song.extra_authors or []))
+        await song_repository.add_authors(session, view_song.id, author_ids)
+        authors = []
+        for id_ in author_ids:
+            authors.append((await user_repository.read(id_, session)).name)
 
-    return SongViewApi(**view_song.model_dump(), authors=[user.id])
+    return SongViewApi(**view_song.model_dump(), authors=authors)
 
 
 @router.put("/{song_id}")
